@@ -7,7 +7,33 @@ class HcodeGrid {
             
                 $('#modal-update').modal('show');
               
-                }    
+                },
+                afterDeleteClick:(e)=>{
+            
+                window.location.reload();
+                  
+                },
+                afterFormCreate: (e) =>{
+
+                    window.location.reload();
+
+                },
+                afterFormUpdate: (e) =>{
+
+                    window.location.reload();
+
+                },
+                afterFormCreateError: (e) =>{
+
+                    alert('Não foi possível enviar o formulário.')
+
+                },
+                afterFormUpdateError: (e) =>{
+
+                    alert('Não foi possível enviar o formulário.')
+
+                }
+
             }, configs.listeners)
 
         this.options = Object.assign({}, {
@@ -28,11 +54,11 @@ initForms(){
 
     this.formCreate.save().then(json=>{
 
-    window.location.reload()
+    this.fireEvent('afterFormCreate')
 
     }).catch(err=>{
 
-    console.log(err);
+    this.fireEvent('afterFormCreateError');
 
 })
 
@@ -40,11 +66,11 @@ initForms(){
 
     this.formUpdate.save().then(json=>{
 
-    window.location.reload()
+    this.fireEvent('afterFormUpdate')
 
     }).catch(err=>{
 
-    console.log(err);
+        this.fireEvent('afterFormUpdateError');
 
     });
 
@@ -56,6 +82,18 @@ fireEvent(name, args){
 
 }
 
+getTrData(e){
+
+    let tr = e.composedPath().find(el => {
+
+        return (el.tagName.toUpperCase() === 'TR')
+  
+      });
+  
+      return JSON.parse(tr.dataset.row);
+
+}
+
 initButtons(){
 
 [...document.querySelectorAll(this.options.btnUpdate)].forEach(btn =>{
@@ -64,13 +102,7 @@ initButtons(){
 
     this.fireEvent('beforeUpdateClick', [e]);
 
-    let tr = e.composedPath().find(el => {
-
-      return (el.tagName.toUpperCase() === 'TR');
-
-    });
-
-    let data = JSON.parse(tr.dataset.row);
+    let data = this.getTrData(e)
 
     for (let name in data) {
 
@@ -97,13 +129,9 @@ initButtons(){
 
   btn.addEventListener('click', e => {
 
-    let tr = e.composedPath().find(el => {
+    this.fireEvent('beforeDeleteClick')
 
-      return (el.tagName.toUpperCase() === 'TR')
-
-    });
-
-    let data = JSON.parse(tr.dataset.row);
+    let data = this.getTrData(e)
 
     if (confirm(eval('`' + this.options.deleteMsg + '`'))){
 
@@ -111,7 +139,7 @@ initButtons(){
         method: 'DELETE'
       }).then(response => response.json()).then(json => {
 
-        window.location.reload();
+        this.fireEvent('afterDeleteClick')
 
       })
 
