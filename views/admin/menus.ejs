@@ -171,20 +171,49 @@ window.location.reload()
 
 console.log(err);
 
+}),
+
+[...document.querySelectorAll('.btn-delete')].forEach(btn=>{
+
+  btn.addEventListener('click', e => {
+
+
+    let tr = e.composedPath().find((el) => {
+
+    return (el.tagName.toUpperCase() === 'TR');
+  });
+  
+
+    let data = JSON.stringify(tr.dataset.row);
+
+    console.log(data.id)
+
+    if (confirm(`Deseja realmente excluir o menu ${data.title}?`)){
+
+    fetch(`/admin/menus/${data.id}`, {
+      method: 'DELETE'
+    }).then(response => response.json()).then(json =>{
+
+      console.log(json)
+
+      });
+    
+    };
+
+  });
+
 });
+
 
 [...document.querySelectorAll('.btn-update')].forEach(btn =>{
 
   btn.addEventListener('click', e => {
 
-    console.log(e)
-
-    let tr = e.path.find(el => {
+    let tr = e.composedPath().find((el) => {
 
       return (el.tagName.toUpperCase() === 'TR');
 
     });
-
     let data = JSON.parse(tr.dataset.row)
 
     for (let name in data) {
@@ -195,16 +224,14 @@ console.log(err);
           formUpdate.querySelector('img').src = '/' + data[name]
         break;
         default:
-        let input = formUpdate.querySelector(`[name=${name}]`).value = data[name];
-        if(input) input.value = data [names]
+        let input = formUpdate.querySelector(`[name=${name}]`)
+        if(input) input.value = data [name]
       }
 
 
     }
 
-    $('modal-update').modal('show');
-
-    console.log(tr)
+    $('#modal-update').modal('show');
 
   })
 

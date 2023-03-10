@@ -1,6 +1,5 @@
 let conn = require('./db');
 let path = require('path');
-const { param } = require('../routes');
 
 module.exports = {
     getMenus(){
@@ -82,7 +81,30 @@ module.exports = {
 
         })
 
-    }
+    },
+
+delete(id){
+
+    return new Promise((resolve, reject)=>{
+
+        conn.query(`
+        DELETE FROM tb_menus WHERE id = ?
+        `, [
+            id
+        ], (err, results)=>{
+
+            if(err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+
+        }
+        )
+
+    })
+
+}
 
 
 }
