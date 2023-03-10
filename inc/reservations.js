@@ -43,7 +43,7 @@ module.exports = {
                SET
                     name = ?,
                     email = ?,
-                    people = ?
+                    people = ?,
                     date = ?,
                     time = ?
                 WHERE id = ?
