@@ -50,7 +50,7 @@ module.exports = {
         return new Promise((resolve, reject)=>{
 
             conn.query(`
-            SELECT * FROM tb_users ORDER BY title
+            SELECT * FROM tb_users ORDER BY name
             `, (err, results)=>{
 
                 if(err){
@@ -86,7 +86,7 @@ module.exports = {
                 `;
 
             } else {
-                
+
                 query = `
                 INSERT INTO tb_users (name, email, password)
                 VALUES(?, ?, ?)
