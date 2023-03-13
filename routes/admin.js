@@ -5,6 +5,7 @@ var menus = require("./../inc/menus");
 var reservations = require("./../inc/reservations");
 var contacts = require("./../inc/contacts");
 var emails = require("./../inc/emails");
+var Pagination = require("./../inc/Pagination");
 var moment = require("moment");
 var router = express.Router();
 
@@ -168,15 +169,23 @@ router.delete("/menus/:id", function(req, res, next){
 
 router.get("/reservations", function(req, res, next){
 
-    reservations.getReservations().then(data=>{
+    let start = (req.query.start) ? req.query.start : moment().subtract(1, "year").format("YYYY-MM-DD")
+    let end = (req.query.end) ? req.query.end : moment().format("YYYY-MM-DD")
+
+    reservations.getReservations(req).then(pag => {
 
         res.render("admin/reservations", admin.getParams(req, {
-            date: {},
-            data,
-            moment
-        }));
+            date:{
+                start,
+                end
+            },
+            data: pag.data,
+            moment,
+            links: pag.links
+        }))
 
     })
+    
 })
 
 router.post("/reservations", function(req, res, next){
