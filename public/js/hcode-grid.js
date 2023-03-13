@@ -60,6 +60,8 @@ initForms(){
 
     this.formCreate = document.querySelector(this.options.formCreate);
 
+    if (this.formCreate){
+
     this.formCreate.save({
         succes:()=>{
             this.fireEvent('afterFormCreate');
@@ -68,17 +70,21 @@ initForms(){
             this.fireEvent('afterFormCreateError');
         }
     })
+}
 
     this.formUpdate = document.querySelector(this.options.formUpdate);
 
-    this.formUpdate.save({
-        succes:()=>{
-            this.fireEvent('afterFormUpdate')
-        },
-        failure:()=>{
-            this.fireEvent('afterFormUpdateError');
-        }
-    });
+    if(this.formUpdate){
+
+        this.formUpdate.save({
+            succes:()=>{
+                this.fireEvent('afterFormUpdate')
+            },
+            failure:()=>{
+                this.fireEvent('afterFormUpdateError');
+            }
+        });
+    }
 
 }
 
